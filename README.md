@@ -89,4 +89,11 @@ http://localhost:8080/auth/products
 
 ![Страница входа](images/4.jpg)
 
+**6. Создание, редактирование и удаление товаров**
+
+```
+http://localhost:8080/auth/products/1
+```
+
+![Страница входа](images/5.jpg)
 
