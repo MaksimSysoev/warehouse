@@ -26,7 +26,7 @@ CREATE TABLE if not exists products (
 	categories_id int references categories(id)
 );
 
-/*
+
 
 
 
@@ -38,7 +38,7 @@ WHERE NOT EXISTS (SELECT id FROM users WHERE id=1);
 INSERT INTO USERS (id, login, password, role, status) SELECT 2, 'user', '$2y$12$FWzRhWxfzjfx4Ii2vid9GO5NLqVhwPSwqNq5OyHBpkOX.q3J9TqIi', 'USER', 'ACTIVE'
 WHERE NOT EXISTS (SELECT id FROM users WHERE id=2);
 
-
+/*
 INSERT INTO categories (id, name, descr) SELECT
 1,
 'Авторитет',
