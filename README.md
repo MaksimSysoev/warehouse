@@ -54,3 +54,4 @@
 ```
 http://localhost:8080/auth/login
 ```
+![Страница входа](images/1.jpg)
