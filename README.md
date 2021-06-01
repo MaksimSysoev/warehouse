@@ -13,6 +13,10 @@
 
 #
 
+> > #### - Видео инструкция по использованию приложения.
+> > [![Смотреть](https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/YOUTUBE--SOCIAL-PLAY.png/320px-YOUTUBE--SOCIAL-PLAY.png)](https://youtu.be/HC8S3sKIqBo)
+> > 
+
 ### Авторизация пользователей:
 
 * Работа с приложением возможна только после авторизации пользователей посредством логина и пароля.
