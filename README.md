@@ -56,4 +56,7 @@
 
 ```
 http://localhost:8080/auth/login
+Вход под администратором:
+логин admin
+пароль admin
 ```
