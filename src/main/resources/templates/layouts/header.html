@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание категории</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+<body>
+<header th:fragment="header">
+    <div class="row" style="height: 20px; "></div>
+
+    <div class="row" style="height: 50px; ">
+        <div class="col-4">
+            <table>
+                <tr>
+                    <td valign="middle" align="left"><span sec:authentication="name">Username</span></td>
+                    <td width="15" align="center">|</td>
+                    <td valign="middle" align="left" style="padding: 0; ">
+                        <form action="/auth/logout" method="POST">
+                            <button type="submit" class="btn btn-link btn-sm">Выйти</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-8"></div>
+    </div>
+
+    <div class="row" style="height: 25px; "></div>
+
+    <div class="row">
+        <div class="col-12">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" id="categories" href="/auth/categories">Категории</a>
+                </li>
+
+                <div sec:authorize="hasAuthority('users:write')">
+                    <li class="nav-item">
+                        <a class="nav-link" id="category-create" href="/auth/category-create">Создание категории</a>
+                    </li>
+                </div>
+
+                <li class="nav-item">
+                    <a class="nav-link" id="products" href="/auth/products">Товары</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row" style="height: 35px; "></div>
+</header>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание категории</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#category-create").addClass("active");
+            $("#category-create").attr("aria-current", "page");
+        });
+    </script>
+</head>
+<body>
+
+    <div class="container">
+
+        <div th:insert="layouts/header :: header"></div>
+
+        <div th:insert="layouts/error :: error"></div>
+
+
+
+        <div class="row">
+
+        <div class="col-2"></div>
+        <div class="col-8">
+            <form action="#" th:action="@{/auth/category-create}" th:object="${category}"  method="post">
+                <label for="name">Название категории</label>
+                <input class="form-control"  type="text" th:field="*{name}" id="name" placeholder="Название категории" required >
+                <br>
+                <label for="descr">Описание категории</label>
+                <textarea class="form-control" th:field="*{descr}" id="descr"  placeholder="Описание категории"  style="height: 100px"  minlength="150" required></textarea>
+                <br>
+                <input class="btn btn-primary"  type="submit" value="Создать категорию">
+            </form>
+
+        </div>
+        <div class="col-2"></div>
+
+        </div>
+    </div>
+
+</body>
+</html>

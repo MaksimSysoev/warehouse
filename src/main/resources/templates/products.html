@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание категории</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#products").addClass("active");
+            $("#products").attr("aria-current", "page");
+        });
+    </script>
+</head>
+<body>
+<div sec:authorize="isAuthenticated()">
+    <div class="container">
+
+    <div th:insert="layouts/header :: header"></div>
+        <div th:insert="layouts/error :: error"></div>
+
+    <div class="row">
+        <div class="col-12">
+            <div th:switch="${categories.size()}">
+                <h2 th:case="0">Нет созданных категорий</h2>
+                <div th:case="*">
+                    <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-7">
+                        <div class="col " th:each="cat : ${categories}">
+                            <a th:href="@{/auth/products/{id}(id=${cat.id})}" th:text="${cat.name}"  class="btn btn-outline-secondary" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="height: 35px; "></div>
+
+    <div class="row">
+        <div class="col-12">
+            <div th:switch="${products.size()}">
+            <h3 th:case="0">
+                Не создано ни одного продукта
+            </h3>
+            <br>
+            <div sec:authorize="hasAuthority('users:write')" style="text-align: center; ">
+                <h4>Для добавления выберите категорию.</h4>
+            </div>
+            <br>
+            <div th:case="*">
+                <table width="100%">
+                    <thead>
+                    <tr>
+                        <th>Изображение</th>
+                        <th>Название</th>
+                        <th>Описание</th>
+                        <th>Цена</th>
+                        <th>Кол-во<br>товаров</th>
+                    </tr>
+                    <tr><td height="40px;"></td></tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="prod : ${products}" height="70px; " align="left" valign="top">
+                        <td>
+                            <img width="250" th:src="@{/img/{filename}(filename = ${prod.img})}">
+                        </td>
+                        <td th:text="${prod.name}"></td>
+                        <td th:text="${prod.descr}"></td>
+                        <td th:text="${prod.price}"></td>
+                        <td th:text="${prod.count}"></td>
+                    </tr>
+                    </tbody>
+                    <tr><td height="40px; "></td></tr>
+                </table>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    </div>
+</div>
+</body>
+</html>

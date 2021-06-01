@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Список категорий</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script>
+
+        $(document).ready(function() {
+            $("#categories").addClass("active");
+            $("#categories").attr("aria-current", "page");
+        });
+
+        var prevId = 0;
+        function edit(id) {
+            //Сначала закрывает открытую форму
+            if (prevId!=0) {
+                $("#formname" + prevId).hide();
+                $("#formdescr" + prevId).hide();
+                $("#formempty" + prevId).hide();
+
+                $("#fieldname" + prevId).show();
+                $("#fielddescr" + prevId).show();
+                $("#fieldempty" + prevId).show();
+            }
+
+
+            // Далее раскрывает новую форму
+            $("#fieldname" + id).hide();
+            $("#fielddescr" + id).hide();
+            $("#fieldempty" + id).hide();
+
+            $("#formname" + id).show();
+            $("#formdescr" + id).show();
+            $("#formempty" + id).show();
+
+            prevId = id;
+        }
+
+        function cancel(id) {
+
+            $("#formname" + id).hide();
+            $("#formdescr" + id).hide();
+            $("#formempty" + id).hide();
+
+            $("#fieldname" + id).show();
+            $("#fielddescr" + id).show();
+            $("#fieldempty" + id).show();
+
+            prevId = 0;
+        }
+
+        function del(id) {
+            $("#form" + id).on('submit', function() {
+                return confirm('С выбранной категорией удаляться все товары. Подтвердить удаление?');
+            });
+        }
+
+    </script>
+</head>
+<body>
+<div sec:authorize="isAuthenticated()">
+    <div class="container">
+
+        <div th:insert="layouts/header :: header"></div>
+
+        <div class="row">
+
+            <div class="col-12">
+                <div th:switch="${categories.size}">
+                    <h2 th:case="0">Нет созданных категорий</h2>
+                    <div th:case="*">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th width="25px; "></th>
+                                <th>Краткое описание</th>
+                                <th>Кол-во<br>товаров</th>
+                                <div sec:authorize="hasAuthority('users:write')">
+                                    <th width="15px; "></th>
+                                    <th>Действия</th>
+
+                                </div>
+                            </tr>
+                            <tr><td height="40px;"></td></tr>
+                            </thead>
+                            <tbody>
+
+                            <tr th:each="cat : ${categories}" height="70px; " align="left" valign="top">
+
+                                <form  th:action="@{/auth/categories/{id}(id=${cat.id})}" method="post">
+                                    <td th:id="'formname' + ${cat.id}" style="display: none;">
+                                       <input readonly type="text" name="name"  class="form-control" th:value="${cat.name}" required>
+                                    </td>
+
+                                    <td  th:id="'formempty' + ${cat.id}" style="display: none;" width="25px; "></td>
+
+                                    <td th:id="'formdescr' + ${cat.id}" style="display: none;" align="left">
+                                        <textarea name="descr" th:text="${cat.descr}" rows="7" cols="90" class="form-control" minlength="150" required></textarea>
+                                        <br>
+                                        <table>
+                                            <tr>
+                                                <td><input class="btn btn-primary btn-sm"  type="submit" value="Обновить"></td>
+                                                <td width="10px;"></td>
+                                                <td><input class="btn btn-secondary btn-sm" th:onclick="'javascript:cancel(\''+${cat.id}+'\')'"  type="button" value="Отмена"></td>
+                                            </tr>
+                                        </table>
+
+                                        <br><br>
+                                    </td>
+
+                                    <td th:id="'formempty' + ${cat.id}" style="display: none;" th:text="${cat.products.size()}" align="center">
+
+                                    </td>
+
+                                    <td th:id="'formempty' + ${cat.id}" style="display: none;"></td>
+                                </form>
+
+                                <form th:id="'form' + ${cat.id}" th:action="@{/auth/category-delete/{id}(id=${cat.id})}" method="post">
+                                     <td th:id="'fieldname' + ${cat.id}" th:text="${cat.name}"></td>
+                                     <td th:id="'fieldempty' + ${cat.id}" width="25px; "></td>
+                                     <td th:id="'fielddescr' + ${cat.id}" th:text="${#strings.substring(cat.descr,0,150)}"></td>
+                                     <td th:id="'fieldempty' + ${cat.id}" align="center" th:text="${cat.products.size()}"></td>
+                                     <td th:id="'fieldempty' + ${cat.id}"></td>
+
+                                    <div sec:authorize="hasAuthority('users:write')">
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <button type="button" class="btn btn-success btn-sm" th:onclick="'javascript:edit(\''+${cat.id}+'\')'"  title="Редактировать">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </td>
+
+                                                    <td width="15px; "></td>
+
+                                                    <td>
+                                                        <button type="submit" class="btn btn-danger btn-sm" th:onclick="'javascript:del(\''+${cat.id}+'\')'" title="Удалить">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                                                <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
+                                                            </svg>
+                                                        </button>
+                                                    </td>
+
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </div>
+                                </form>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
